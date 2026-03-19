@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hexmarket-sdk"
+version = "0.1.0"
+description = "Python SDK for the HexMarket prediction market API — quantitative trading & market making"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [{name = "HexMarket Team"}]
+keywords = ["prediction-market", "trading", "solana", "sdk", "quantitative"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Office/Business :: Financial :: Investment",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "httpx>=0.27",
+    "pydantic>=2.0",
+    "pynacl>=1.5",
+    "base58>=2.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.4",
+]
+
+[tool.setuptools.packages.find]
+include = ["hexmarket_sdk*"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
