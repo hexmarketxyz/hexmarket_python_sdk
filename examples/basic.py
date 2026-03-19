@@ -1,7 +1,7 @@
 """Basic SDK usage: browse events, check balance, read orderbook.
 
 Usage:
-    export HEX_API_URL=https://api.hexmarket.io
+    export HEX_API_URL=https://api.hexmarket.xyz
     python examples/basic.py
 
 For authenticated endpoints, also set:

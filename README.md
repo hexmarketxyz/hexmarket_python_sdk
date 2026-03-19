@@ -1,6 +1,6 @@
 # HexMarket Python SDK
 
-Python client for the [HexMarket](https://hexmarket.io) prediction market API. Built for quantitative trading and market making.
+Python client for the [HexMarket](https://www.hexmarket.xyz) prediction market API. Built for quantitative trading and market making.
 
 ## Installation
 
@@ -17,7 +17,7 @@ import asyncio
 from hexmarket_sdk import HexClient, ApiCredentials
 
 async def main():
-    async with HexClient("https://api.hexmarket.io") as client:
+    async with HexClient("https://api.hexmarket.xyz") as client:
         # Browse markets (no auth needed)
         events = await client.list_events(status="active", limit=10)
         for event in events:
@@ -71,7 +71,7 @@ import base58
 # Your 32-byte Ed25519 secret key
 secret_key = base58.b58decode("YourBase58SecretKey")[:32]
 
-async with HexClient("https://api.hexmarket.io") as client:
+async with HexClient("https://api.hexmarket.xyz") as client:
     client.set_credentials("YourPubkey", ApiCredentials(...))
 
     nonce = generate_nonce()

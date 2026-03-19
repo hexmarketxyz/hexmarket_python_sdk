@@ -4,7 +4,7 @@ Posts symmetric bid/ask quotes around the current mid price
 and refreshes them periodically.
 
 Usage:
-    export HEX_API_URL=https://api.hexmarket.io
+    export HEX_API_URL=https://api.hexmarket.xyz
     export HEX_PUBKEY=<your-solana-pubkey>
     export HEX_API_KEY=<api-key>
     export HEX_SECRET=<base64url-secret>

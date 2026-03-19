@@ -45,7 +45,7 @@ class HexClient:
 
         from hexmarket_sdk import HexClient, ApiCredentials
 
-        client = HexClient("https://api.hexmarket.io")
+        client = HexClient("https://api.hexmarket.xyz")
 
         # Public endpoints (no auth)
         events = await client.list_events(status="active", limit=5)
