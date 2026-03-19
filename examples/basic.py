@@ -27,20 +27,22 @@ async def main() -> None:
         events = await client.list_events(status="active", limit=5)
         print("=== Active Events ===")
         for item in events:
-            print(f"  {item.title} ({len(item.outcomes)} outcomes)")
-            for outcome in item.outcomes:
-                price_str = (
-                    f"{int(outcome.price * 100)}c"
-                    if outcome.price is not None
-                    else "n/a"
-                )
-                print(f"    - {outcome.label} @ {price_str}")
+            print(f"  {item.title} ({len(item.markets)} markets)")
+            for market in item.markets:
+                print(f"  [{market.title}]")
+                for outcome in market.outcomes:
+                    price_str = (
+                        f"{int(outcome.price * 100)}c"
+                        if outcome.price is not None
+                        else "n/a"
+                    )
+                    print(f"    - {outcome.label} @ {price_str}")
 
         # Orderbook for the first outcome
-        if events and events[0].outcomes:
-            oid = events[0].outcomes[0].id
+        if events and events[0].markets and events[0].markets[0].outcomes:
+            oid = events[0].markets[0].outcomes[0].id
             book = await client.get_orderbook(oid)
-            print(f"\n=== Orderbook: {events[0].outcomes[0].label} ===")
+            print(f"\n=== Orderbook: {events[0].markets[0].outcomes[0].label} ===")
             print("  Bids:")
             for level in book.bids[:5]:
                 print(f"    {level.quantity} @ {level.price}")

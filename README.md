@@ -21,10 +21,10 @@ async def main():
         # Browse markets (no auth needed)
         events = await client.list_events(status="active", limit=10)
         for event in events:
-            print(f"{event.title} — {len(event.outcomes)} outcomes")
+            print(f"{event.title} — {len(event.markets)} markets")
 
         # Read orderbook
-        outcome_id = events[0].outcomes[0].id
+        outcome_id = events[0].markets[0].outcomes[0].id
         book = await client.get_orderbook(outcome_id)
         print(f"Best bid: {book.bids[0].price}, Best ask: {book.asks[0].price}")
 

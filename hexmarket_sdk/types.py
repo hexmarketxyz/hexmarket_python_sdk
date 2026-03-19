@@ -239,6 +239,34 @@ class HexEvent(BaseModel):
     is_archived: Optional[bool] = None
 
 
+class MarketDetail(BaseModel):
+    """A market with its nested outcomes."""
+    model_config = ConfigDict(populate_by_name=True)
+
+    id: str
+    event_id: str
+    title: str
+    title_translations: Optional[dict[str, str]] = None
+    description: Optional[str] = None
+    image_url: Optional[str] = None
+    icon_url: Optional[str] = None
+    market_type: str
+    status: str
+    start_time: Optional[datetime] = None
+    close_time: Optional[datetime] = None
+    resolution_time: Optional[datetime] = None
+    created_at: Optional[datetime] = None
+    resolved_at: Optional[datetime] = None
+    sort_order: int = 0
+    onchain_market_id: Optional[int] = None
+    pubkey: Optional[str] = None
+    vault_pubkey: Optional[str] = None
+    collateral_mint: Optional[str] = None
+    num_outcomes: int = 0
+    price_increment: Optional[Decimal] = None
+    outcomes: list[Outcome] = []
+
+
 class EventListItem(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
@@ -255,7 +283,7 @@ class EventListItem(BaseModel):
     created_at: Optional[datetime] = None
     resolved_at: Optional[datetime] = None
     is_archived: Optional[bool] = None
-    outcomes: list[Outcome] = []
+    markets: list[MarketDetail] = []
     tags: list[Tag] = []
 
 
@@ -275,8 +303,7 @@ class EventDetail(BaseModel):
     created_at: Optional[datetime] = None
     resolved_at: Optional[datetime] = None
     is_archived: Optional[bool] = None
-    outcomes: list[Outcome] = []
-    markets: list[Market] = []
+    markets: list[MarketDetail] = []
     tags: list[Tag] = []
 
 
