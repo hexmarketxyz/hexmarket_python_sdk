@@ -12,6 +12,7 @@ from hexmarket_sdk.auth import (
     ed25519_sign,
     pubkey_b58,
 )
+from hexmarket_sdk.ws import HexMarketWs, HexUserWs
 from hexmarket_sdk.types import (
     Side,
     OrderType,
@@ -42,6 +43,8 @@ from hexmarket_sdk.types import (
 
 __all__ = [
     "HexClient",
+    "HexMarketWs",
+    "HexUserWs",
     "ApiCredentials",
     "build_l2_headers",
     "build_order_message",

@@ -26,6 +26,7 @@ dependencies = [
     "pydantic>=2.0",
     "pynacl>=1.5",
     "base58>=2.1",
+    "websockets>=13.0",
 ]
 
 [project.optional-dependencies]
