@@ -272,6 +272,28 @@ class HexClient:
         self._check(resp)
         return resp.json()
 
+    async def cancel_all_orders(
+        self,
+        *,
+        market_id: str | None = None,
+        event_id: str | None = None,
+    ) -> dict:
+        """Cancel all open orders, optionally filtered by market or event.
+
+        Returns ``{"cancelled_count": N, "status": "cancelled"}``.
+        """
+        params: dict[str, Any] = {}
+        if market_id:
+            params["market_id"] = market_id
+        if event_id:
+            params["event_id"] = event_id
+
+        path = "/api/v1/orders"
+        headers = self._l2_headers("DELETE", path)
+        resp = await self._http.delete(path, params=params, headers=headers)
+        self._check(resp)
+        return resp.json()
+
     async def get_open_orders(self, outcome_id: str | None = None) -> list[Order]:
         pubkey, _ = self._require_auth()
         path = f"/api/v1/orders?user={pubkey}&status=open"
