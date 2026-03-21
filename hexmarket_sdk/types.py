@@ -42,9 +42,10 @@ class PlaceOrderParams(BaseModel):
     quantity: int
     nonce: int
     signature: str
+    client_order_id: Optional[str] = None
 
     def to_api_dict(self) -> dict:
-        return {
+        d = {
             "outcome_id": self.outcome_id,
             "side": self.side.value,
             "order_type": self.order_type.value,
@@ -54,12 +55,16 @@ class PlaceOrderParams(BaseModel):
             "nonce": self.nonce,
             "signature": self.signature,
         }
+        if self.client_order_id is not None:
+            d["client_order_id"] = self.client_order_id
+        return d
 
 
 class PlaceOrderResponse(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
     order_id: str
     status: str
+    client_order_id: Optional[str] = None
 
 
 class Order(BaseModel):
@@ -81,6 +86,7 @@ class Order(BaseModel):
     created_at: datetime
     updated_at: datetime
     expired_at: Optional[datetime] = None
+    client_order_id: Optional[str] = None
 
 
 # ---------------------------------------------------------------------------

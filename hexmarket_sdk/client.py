@@ -289,22 +289,42 @@ class HexClient:
     async def batch_cancel_orders(
         self,
         market_id: str,
-        order_ids: list[str],
+        order_ids: list[str] | None = None,
+        client_order_ids: list[str] | None = None,
     ) -> dict:
         """Cancel multiple orders in a single batch.
 
         All orders must belong to the same market.
+        Supports cancellation by ``order_ids`` and/or ``client_order_ids``.
         Returns ``{"results": [{"order_id": "...", "status": "cancelled"}, ...]}``.
         """
         path = "/api/v1/orders/batch"
-        body = json.dumps({
-            "market_id": market_id,
-            "order_ids": order_ids,
-        })
+        payload: dict = {"market_id": market_id}
+        if order_ids:
+            payload["order_ids"] = order_ids
+        if client_order_ids:
+            payload["client_order_ids"] = client_order_ids
+        body = json.dumps(payload)
         headers = self._l2_headers("DELETE", path)
         headers["Content-Type"] = "application/json"
 
         resp = await self._http.request("DELETE", path, content=body, headers=headers)
+        self._check(resp)
+        return resp.json()
+
+    async def get_order_by_client_id(self, client_order_id: str) -> Order:
+        """Get an order by client_order_id (requires L2 auth)."""
+        path = f"/api/v1/orders/client/{client_order_id}"
+        headers = self._l2_headers("GET", path)
+        resp = await self._http.get(path, headers=headers)
+        self._check(resp)
+        return Order.model_validate(resp.json())
+
+    async def cancel_order_by_client_id(self, client_order_id: str) -> dict:
+        """Cancel an order by client_order_id (requires L2 auth)."""
+        path = f"/api/v1/orders/client/{client_order_id}"
+        headers = self._l2_headers("DELETE", path)
+        resp = await self._http.delete(path, headers=headers)
         self._check(resp)
         return resp.json()
 
