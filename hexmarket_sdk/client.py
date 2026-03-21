@@ -264,6 +264,50 @@ class HexClient:
         self._check(resp)
         return PlaceOrderResponse.model_validate(resp.json())
 
+    async def batch_place_orders(
+        self,
+        market_id: str,
+        orders: list[PlaceOrderParams],
+    ) -> dict:
+        """Place multiple orders in a single batch.
+
+        All orders must belong to the same market.
+        Returns ``{"results": [{"index": 0, "order_id": "...", "status": "accepted"}, ...]}``.
+        """
+        path = "/api/v1/orders/batch"
+        body = json.dumps({
+            "market_id": market_id,
+            "orders": [o.to_api_dict() for o in orders],
+        })
+        headers = self._l2_headers("POST", path)
+        headers["Content-Type"] = "application/json"
+
+        resp = await self._http.post(path, content=body, headers=headers)
+        self._check(resp)
+        return resp.json()
+
+    async def batch_cancel_orders(
+        self,
+        market_id: str,
+        order_ids: list[str],
+    ) -> dict:
+        """Cancel multiple orders in a single batch.
+
+        All orders must belong to the same market.
+        Returns ``{"results": [{"order_id": "...", "status": "cancelled"}, ...]}``.
+        """
+        path = "/api/v1/orders/batch"
+        body = json.dumps({
+            "market_id": market_id,
+            "order_ids": order_ids,
+        })
+        headers = self._l2_headers("DELETE", path)
+        headers["Content-Type"] = "application/json"
+
+        resp = await self._http.request("DELETE", path, content=body, headers=headers)
+        self._check(resp)
+        return resp.json()
+
     async def cancel_order(self, order_id: str) -> dict:
         path = f"/api/v1/orders/{order_id}"
         headers = self._l2_headers("DELETE", path)
