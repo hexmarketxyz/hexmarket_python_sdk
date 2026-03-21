@@ -45,10 +45,10 @@ class PlaceOrderParams(BaseModel):
 
     def to_api_dict(self) -> dict:
         return {
-            "outcomeId": self.outcome_id,
+            "outcome_id": self.outcome_id,
             "side": self.side.value,
-            "orderType": self.order_type.value,
-            "timeInForce": self.time_in_force.value,
+            "order_type": self.order_type.value,
+            "time_in_force": self.time_in_force.value,
             "price": float(self.price),
             "quantity": self.quantity,
             "nonce": self.nonce,
