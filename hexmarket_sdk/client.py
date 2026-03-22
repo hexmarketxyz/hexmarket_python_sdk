@@ -344,7 +344,7 @@ class HexClient:
     ) -> dict:
         """Cancel all open orders, optionally filtered by market or event.
 
-        Returns ``{"cancelled_count": N, "status": "cancelled"}``.
+        Returns ``{"cancelled_count": N, "status": "cancelled", "orders": [{"order_id": "...", "client_order_id": "..."}]}``.
         """
         params: dict[str, Any] = {}
         if market_id:
