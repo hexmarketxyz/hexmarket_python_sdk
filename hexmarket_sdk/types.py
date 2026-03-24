@@ -43,6 +43,8 @@ class PlaceOrderParams(BaseModel):
     nonce: int
     signature: str
     client_order_id: Optional[str] = None
+    session_pubkey: Optional[str] = None
+    amount: Optional[float] = None
 
     def to_api_dict(self) -> dict:
         d = {
@@ -57,6 +59,10 @@ class PlaceOrderParams(BaseModel):
         }
         if self.client_order_id is not None:
             d["client_order_id"] = self.client_order_id
+        if self.session_pubkey is not None:
+            d["session_pubkey"] = self.session_pubkey
+        if self.amount is not None:
+            d["amount"] = self.amount
         return d
 
 
@@ -87,6 +93,26 @@ class Order(BaseModel):
     updated_at: datetime
     expired_at: Optional[datetime] = None
     client_order_id: Optional[str] = None
+
+
+class BatchCancelResult(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+    order_id: str
+    status: str
+
+
+class BatchPlaceResult(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+    index: int
+    order_id: Optional[str] = None
+    status: str
+    error: Optional[str] = None
+
+
+class BatchUpdateResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+    cancel_results: list[BatchCancelResult]
+    place_results: list[BatchPlaceResult]
 
 
 # ---------------------------------------------------------------------------

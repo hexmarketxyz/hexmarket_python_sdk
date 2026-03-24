@@ -9,6 +9,7 @@ import httpx
 
 from hexmarket_sdk.auth import ApiCredentials, build_l2_headers
 from hexmarket_sdk.types import (
+    BatchUpdateResponse,
     EventDetail,
     EventListItem,
     MergedOrderBook,
@@ -311,6 +312,34 @@ class HexClient:
         resp = await self._http.request("DELETE", path, content=body, headers=headers)
         self._check(resp)
         return resp.json()
+
+    async def batch_update_orders(
+        self,
+        market_id: str,
+        cancel_order_ids: list[str] | None = None,
+        cancel_client_order_ids: list[str] | None = None,
+        place_orders: list[PlaceOrderParams] | None = None,
+    ) -> BatchUpdateResponse:
+        """Cancel and place orders in a single atomic batch.
+
+        All orders must belong to the same market.
+        Returns a ``BatchUpdateResponse`` with ``cancel_results`` and ``place_results``.
+        """
+        path = "/api/v1/orders/batch"
+        payload: dict = {"market_id": market_id}
+        if cancel_order_ids:
+            payload["cancel_order_ids"] = cancel_order_ids
+        if cancel_client_order_ids:
+            payload["cancel_client_order_ids"] = cancel_client_order_ids
+        if place_orders:
+            payload["place_orders"] = [o.to_api_dict() for o in place_orders]
+        body = json.dumps(payload)
+        headers = self._l2_headers("PUT", path)
+        headers["Content-Type"] = "application/json"
+
+        resp = await self._http.put(path, content=body, headers=headers)
+        self._check(resp)
+        return BatchUpdateResponse.model_validate(resp.json())
 
     async def get_order_by_client_id(self, client_order_id: str) -> Order:
         """Get an order by client_order_id (requires L2 auth)."""
